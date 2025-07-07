@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Orders</title>
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='styles/header.css') }}"
+    />
+
+    <style>
+      body {
+        background-color: #000;
+        color: #fff;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .navigation {
+        background-color: #1a1a1a;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .navigation a {
+        color: #4caf50;
+        text-decoration: none;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .card {
+        background-color: #1e1e1e;
+        color: #fff;
+        animation: fadeInUp 0.6s ease;
+      }
+
+      .table {
+        color: #fff;
+      }
+
+      .table thead {
+        background-color: #2c2c2c;
+      }
+
+      .table tbody tr:hover {
+        background-color: #2a2a2a;
+      }
+
+      .btn-success {
+        background-color: #4caf50;
+        border: none;
+      }
+
+      .btn-success:hover {
+        background-color: #43a047;
+      }
+
+      .btn-primary {
+        background-color: #2196f3;
+        border: none;
+      }
+
+      .btn-primary:hover {
+        background-color: #1976d2;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="main">
+      <div class="navigation">
+        <h2><a href="/">EcoMart</a></h2>
+      </div>
+    </div>
+
+    <div class="container mt-5 mb-5">
+      <div class="card shadow-lg p-3 mb-5 rounded">
+        <div class="row g-0">
+          <div class="col-md-12">
+            <h1 class="mb-4">My Orders</h1>
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Order ID</th>
+                  <th>Date</th>
+                  <th>Total Amount</th>
+                  <th>Status</th>
+                  <th>View</th>
+                </tr>
+              </thead>
+              <tbody id="order-items">
+                {% if orders %}
+                {% for order in orders %}
+                <tr>
+                  <th scope="row">{{ loop.index }}</th>
+                  <td>{{ order.id }}</td>
+                  <td>{{ order.created_at }}</td>
+                  <td>₹{{ order.total }}</td>
+                  <td><span class="text-success">Will be delivered soon</span></td>
+                  <td>
+                    <a href="/ordered_products/{{order.id}}">
+                      <button class="btn btn-success btn-sm">View</button>
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                  <td colspan="6" class="text-center">No orders found.</td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+
+            <div class="d-flex justify-content-end mt-4">
+              <button
+                class="btn btn-primary ml-3"
+                onclick="location.href='/home'"
+              >
+                Continue Shopping
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

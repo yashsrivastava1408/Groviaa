@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EcoMart Login</title>
+    <link rel="stylesheet" href="/static/styles/bootstrap.min.css" />
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #000000;
+      }
+
+      .container {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: scale(1);
+      }
+
+      .bg-login-image {
+        background: url("/static/ul.jpg");
+        background-position: center;
+        background-size: cover;
+      }
+
+      h3, h4, h6, label, a, p {
+        color: #ffffff !important;
+      }
+
+      .card {
+        background-color: #1c1c1c;
+        border: none;
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.08);
+      }
+
+      .form-control {
+        background-color: #2c2c2c;
+        border: 1px solid #444;
+        color: #fff;
+        padding: 10px;
+      }
+
+      .form-control::placeholder {
+        color: #aaa;
+      }
+
+      .form-check-label {
+        color: #ccc;
+      }
+
+      .btn-primary:hover {
+        background-color: #0069d9;
+        border-color: #0062cc;
+        transition: 0.3s;
+      }
+
+      nav.navbar {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar bg-dark justify-content-center">
+      <h3 class="mb-0">EcoMart</h3>
+    </nav>
+
+    <div class="container">
+      <div class="row justify-content-center w-100">
+        <div class="col-md-9 col-lg-12 col-xl-10">
+          <div class="card shadow-lg o-hidden my-5">
+            <div class="card-body p-0">
+              <div class="row">
+                <div class="col-lg-6 d-none d-lg-flex">
+                  <div class="flex-grow-1 bg-login-image"></div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="p-5">
+                    <div class="text-center">
+                      <h4 class="mb-4">Welcome Back!</h4>
+                    </div>
+                    <form class="user" method="POST" action="/login">
+                      <div class="mb-3">
+                        <input
+                          class="form-control form-control-user"
+                          type="email"
+                          placeholder="Enter Email Address..."
+                          name="email"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <input
+                          class="form-control form-control-user"
+                          type="password"
+                          id="exampleInputPassword"
+                          placeholder="Password"
+                          name="password"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="rememberMe" />
+                          <label class="form-check-label" for="rememberMe">Remember Me</label>
+                        </div>
+                      </div>
+                      <button class="btn btn-primary d-block btn-user w-100" type="submit">
+                        Login
+                      </button>
+                      <hr />
+                    </form>
+                    <h4>
+                      <a href="/register" class="text-decoration-none">Create an Account!</a>
+                    </h4>
+                    <h6>
+                      <a href="/admin_login" class="text-decoration-none">Admin's Login Here</a>
+                    </h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      {% if popup %}
+      alert("You have entered invalid details!");
+      {% endif %}
+    </script>
+  </body>
+</html>

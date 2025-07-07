@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='styles/header.css') }}"
+    />
+    <style type="text/css">
+      .container {
+        max-width: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body py-3">
+      <div class="container">
+        <a class="navbar-brand" href="/admin"
+          ><span class="fs-2"><strong>EcoMart</strong></span></a
+        ><button
+          data-bs-toggle="collapse"
+          class="navbar-toggler"
+          data-bs-target="#navcol-1"
+        >
+          <span class="visually-hidden">Toggle navigation</span
+          ><span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navcol-1">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/product_handler"
+                >Products</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/userbase">Users</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/dashboard">Dashboard</a>
+            </li>
+          </ul>
+          <button class="btn btn-primary" type="button">
+            <a href="/logout" class="text-decoration-none text-white">Logout</a>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <section class="vh-50" style="background-color: #eee">
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col col-lg-9 col-xl-7">
+            <div class="card rounded-3">
+              <div class="card-body p-2">
+                <h4 class="text-center my-3 pb-3">Category</h4>
+
+                <form
+                  class="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2"
+                  method="POST"
+                  enctype="multipart/form-data"
+                >
+                  <div class="col-12">
+                    <div class="form-outline">
+                      <label class="form-label" for="form1"
+                        >Enter new category</label
+                      >
+                      <input
+                        type="text"
+                        id="form1"
+                        class="form-control"
+                        name="name"
+                        placeholder="Category Name"
+                        value="{{category.name}}"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-10">
+                    <button type="submit" class="btn btn-warning">
+                      Update
+                    </button>
+                  </div>
+                </form>
+
+                <table class="table mb-4">
+                  <thead>
+                    <tr>
+                      <th scope="col">Id</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Image</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for category in categories %}
+                    <tr>
+                      <th scope="row">{{category.id}}</th>
+                      <td>{{category.name}}</td>
+                      <td>
+                        <a
+                          href="http://127.0.0.1:5000/static/assets/categories/{{category.image}}"
+                          target="blank"
+                          >{{category.image}}</a
+                        >
+                      </td>
+                      <td>
+                        <button type="submit" class="btn btn-danger">
+                          <a
+                            href="/admin/manage_category/delete/{{category.id}}"
+                            style="background-color: #dc3545"
+                            >Delete</a
+                          >
+                        </button>
+                        <button type="submit" class="btn btn-success ms-1">
+                          <a
+                            href="/admin/manage_category/edit/{{category.id}}"
+                            style="background-color: #198754"
+                            >Edit</a
+                          >
+                        </button>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

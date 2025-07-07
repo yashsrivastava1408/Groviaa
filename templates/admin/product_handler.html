@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Untitled</title>
+    <link rel="stylesheet" href="/static/styles/bootstrap.min.css" />
+    <style>
+      .card {
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+          rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+          rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+      }
+      /* section {
+        margin-top: %;
+      } */
+      .ncard {
+        border: 2px dashed #ccc;
+        background-color: #f1f1f1;
+      }
+
+      .container {
+        max-width: 90%;
+      }
+      .nav_container {
+        max-width: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body py-3">
+      <div class="container nav_container">
+        <a class="navbar-brand" href="/admin"
+          ><span class="fs-2"><strong>EcoMart</strong></span></a
+        ><button
+          data-bs-toggle="collapse"
+          class="navbar-toggler"
+          data-bs-target="#navcol-1"
+        >
+          <span class="visually-hidden">Toggle navigation</span
+          ><span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navcol-1">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Products</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/manage_category/">Category</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/dashboard">Dashboard</a>
+            </li>
+          </ul>
+          <button class="btn btn-primary" type="button">
+            <a href="/logout" class="text-decoration-none text-white">Logout</a>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <h1 class="text-center pb-5">Manage Products</h1>
+    <section>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="card ncard mb-4 rounded-0">
+              <img
+                class="card-img-top w-100 d-block rounded-lg"
+                src="/static/a.png"
+                style="
+                  width: 250px; /* You can set the dimensions to whatever you want */
+                  height: 250px;
+                  object-fit: cover;
+                "
+              />
+
+              <div class="card-body">
+                <h4 class="card-title">ADD NEW PRODUCT</h4>
+                <h6 class="text-muted card-subtitle mb-2"></h6>
+
+                <a
+                  class="text-decoration-none text-white"
+                  href="/admin/new_product/"
+                  ><button class="btn btn-info text-white fs-2">ADD</button></a
+                >
+              </div>
+            </div>
+          </div>
+          {% for product in products %}
+          <div class="col-lg-3">
+            <div class="card mb-4 rounded-0">
+              <img
+                class="card-img-top w-100 d-block rounded-lg"
+                src="/static/assets/{{product.image}}"
+                style="
+                  width: 400px; /* You can set the dimensions to whatever you want */
+                  height: 400px;
+                  object-fit: cover;
+                "
+              />
+
+              <div class="card-body">
+                <h4 class="card-title">{{product.name}}</h4>
+                <h4 class="card-title">₹ {{product.price}}</h4>
+                <br />
+
+                <button class="btn btn-danger">
+                  <a
+                    class="text-decoration-none text-white"
+                    href="/admin/product/edit/{{product.id}}"
+                    >Update</a
+                  >
+                </button>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

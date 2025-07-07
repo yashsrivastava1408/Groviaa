@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EcoMart</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}"/>
+</head>
+<body>
+
+<div class="main">
+  <div class="navigation">
+    <h1>EcoMart</h1>
+
+    <form id="searchForm" method="post" action="/search">
+      <input name="search" type="text" placeholder="Search here" class="searchC" id="inputField"/>
+      <button type="submit" class="searchB"><h2>Search</h2></button>
+      <button type="button" id="searchMicBtn" class="searchB" style="margin-left:10px;">🎤</button>
+    </form>
+
+    <div class="right-nav">
+      <p><a href="/category">Categories</a></p>
+      <p><a href="/cart/{{user.id}}">Cart</a></p>
+      <div class="dropdown">
+        <p class="my-name">{{user.name}}</p>
+        <div class="dropdown-content">
+          <p class="drop-menu"><a href="/profile/{{user.id}}">My Profile</a></p>
+          <p class="drop-menu"><a href="/orders/{{user.id}}">My Orders</a></p>
+          <p class="drop-menu"><a href="/logout">Logout</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Buttons -->
+  <div class="cat-menu-container">
+    {% for category in categories %}
+      <button type="button" class="cat-menu">
+        <a href="#{{category.name}}">{{category.name}}</a>
+      </button>
+    {% endfor %}
+  </div>
+
+  <!-- Recently Added Products -->
+  <div class="lower">
+    <div class="category filterDiv">
+      <h1>Recently Added Products</h1>
+      <div class="product-list">
+        {% for product in recent_products %}
+        <div class="product" name="{{product.name}}">
+          <div class="product-image">
+            <img src="/static/assets/{{product.image}}" alt="" />
+          </div>
+          <div class="product-info">
+            <h2 class="product-name">{{product.name}}</h2>
+            <p>Best Before <b>{{product.best_before}}</b></p>
+            <p><b>₹{{product.price * 1.25}}</b></p>
+            <button class="add-to-cart" onclick="location.href='/product/{{product.id}}'">Buy Now</button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Category-wise Products -->
+    <div class="container">
+      {% for category in categories %}
+      <div class="category" id="{{category.name}}">
+        <h1>{{category.name}}</h1>
+        <div class="product-list">
+          {% for product in products %}
+            {% if product.category == category.name %}
+            <div class="product" name="{{product.name}}">
+              <div class="product-image">
+                <img src="/static/assets/{{product.image}}" alt="" />
+              </div>
+              <div class="product-info">
+                <h2 class="product-name">{{product.name}}</h2>
+                <p>Best Before <b>{{product.best_before}}</b></p>
+                <p><b>₹{{product.price * 1.25}}</b></p>
+                <button class="add-to-cart" onclick="location.href='/product/{{product.id}}'">Buy Now</button>
+              </div>
+            </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- AI Assistant Floating Buttons -->
+<div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+  <button id="aiMicBtn" style="padding: 10px 20px; font-size: 16px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">🎙️ AI Assistant</button>
+  <button id="stopMicBtn" style="padding: 10px 20px; font-size: 16px; background-color: red; color: white; border: none; border-radius: 5px; cursor: pointer; display: none; margin-left: 10px;">⛔ Stop</button>
+</div>
+
+<p id="ai-response" style="margin: 20px;"></p>
+
+<script>
+let selectedVoice = null;
+
+function loadVoices() {
+  return new Promise((resolve) => {
+    let voices = speechSynthesis.getVoices();
+    if (voices.length) return resolve(voices);
+    speechSynthesis.onvoiceschanged = () => resolve(speechSynthesis.getVoices());
+  });
+}
+
+async function selectFemaleVoice() {
+  const voices = await loadVoices();
+  const femaleVoice = voices.find(v =>
+    v.name.toLowerCase().includes('female') ||
+    v.name.toLowerCase().includes('zira') ||
+    v.name.toLowerCase().includes('samantha') ||
+    v.name.toLowerCase().includes('google uk english female')
+  );
+  selectedVoice = femaleVoice || voices.find(v => v.lang.startsWith('en'));
+}
+
+selectFemaleVoice();
+
+// 🎤 Search Mic
+const searchMicBtn = document.getElementById("searchMicBtn");
+const inputField = document.getElementById("inputField");
+
+searchMicBtn.onclick = () => {
+  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.lang = "en-IN";
+  recognition.start();
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    inputField.value = transcript;
+  };
+};
+
+// 🎧 AI Assistant
+const aiMicBtn = document.getElementById("aiMicBtn");
+const stopMicBtn = document.getElementById("stopMicBtn");
+const aiResponse = document.getElementById("ai-response");
+
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.lang = "en-IN";
+recognition.continuous = true;
+recognition.interimResults = false;
+
+aiMicBtn.onclick = () => {
+  recognition.start();
+  aiMicBtn.style.display = "none";
+  stopMicBtn.style.display = "inline-block";
+  aiResponse.innerText = "Listening... You can speak multiple commands.";
+};
+
+stopMicBtn.onclick = () => {
+  recognition.stop();
+  aiMicBtn.style.display = "inline-block";
+  stopMicBtn.style.display = "none";
+  aiResponse.innerText = "Assistant stopped.";
+};
+
+recognition.onresult = async (event) => {
+  const transcript = event.results[event.results.length - 1][0].transcript;
+  console.log("User said:", transcript);
+
+  const response = await fetch("/ai-assistant", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: transcript })
+  });
+
+  const data = await response.json();
+  aiResponse.innerText = "AI: " + data.reply;
+
+  const synth = window.speechSynthesis;
+  const utter = new SpeechSynthesisUtterance(data.reply);
+  if (selectedVoice) utter.voice = selectedVoice;
+  utter.pitch = 1.2;
+  utter.rate = 0.89;
+
+  synth.speak(utter);
+
+  if (data.action) {
+    window.location.href = data.action;
+  }
+};
+</script>
+
+</body>
+</html>

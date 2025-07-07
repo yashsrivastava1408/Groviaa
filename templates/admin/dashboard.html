@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Admin's Dashboard</title>
+    <link rel="stylesheet" href="/static/styles/bootstrap.min.css" />
+    <style type="text/css">
+      .container {
+        max-width: 100%;
+      }
+    </style>
+  </head>
+
+  <body id="page-top">
+    <div id="wrapper">
+      <div class="d-flex flex-column" id="content-wrapper">
+        <div id="content">
+          <nav class="navbar navbar-expand-lg bg-body py-3">
+            <div class="container">
+              <a class="navbar-brand" href="/admin"
+                ><span class="fs-1"><strong>EcoMart</strong></span></a
+              ><button
+                data-bs-toggle="collapse"
+                class="navbar-toggler"
+                data-bs-target="#navcol-1"
+              >
+                <span class="visually-hidden">Toggle navigation</span
+                ><span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="navbar-nav me-auto">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="/admin/product_handler"
+                      >Products</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/admin/manage_category/"
+                      >Category</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/admin/userbase">Users</a>
+                  </li>
+                </ul>
+                <a href="/logout" class="text-decoration-none text-white"
+                  ><button class="btn btn-danger fs-3" type="button">
+                    Logout
+                  </button>
+                </a>
+              </div>
+            </div>
+          </nav>
+          <div class="container-fluid">
+            <div
+              class="d-sm-flex justify-content-between align-items-center mb-4"
+            >
+              <h3 class="text-dark mb-0">Dashboard</h3>
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-primary py-2">
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col me-2">
+                        <div
+                          class="text-uppercase text-primary fw-bold text-xs mb-1"
+                        >
+                          <span class="fs-5">Total Sales</span>
+                        </div>
+                        <div class="text-dark fw-bold h5 mb-0">
+                          <span>₹ {{total_sales}}</span>
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-success py-2">
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col me-2">
+                        <div
+                          class="text-uppercase text-success fw-bold text-xs mb-1"
+                        >
+                          <span class="fs-5">Earnings </span>
+                        </div>
+                        <div class="text-dark fw-bold h5 mb-0">
+                          <span>₹ {{total_earnings}}</span>
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-info py-2">
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col me-2">
+                        <div
+                          class="text-uppercase text-info fw-bold text-xs mb-1"
+                        >
+                          <span class="fs-5">Products</span>
+                        </div>
+                        <div class="row g-0 align-items-center">
+                          <div class="col-auto">
+                            <div class="text-dark fw-bold h5 mb-0 me-3">
+                              <span
+                                >{{total_products}} ({{out_of_stock}} Out Of
+                                Stock)</span
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <i
+                          class="fas fa-clipboard-list fa-2x text-gray-300"
+                        ></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-warning py-2">
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col me-2">
+                        <div
+                          class="text-uppercase text-warning fw-bold text-xs mb-1"
+                        >
+                          <span class="fs-5">User's Count</span>
+                        </div>
+                        <div class="text-dark fw-bold h5 mb-0">
+                          <span>{{total_user}}</span>
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <i class="fas fa-comments fa-2x text-gray-300"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-7 col-xl-8">
+                <div class="card shadow mb-4">
+                  <div
+                    class="card-header d-flex justify-content-between align-items-center"
+                  >
+                    <h6 class="text-primary fw-bold m-0">
+                      Top 10 most selling products.
+                    </h6>
+                    <div class="dropdown no-arrow">
+                      <button
+                        class="btn btn-link btn-sm dropdown-toggle"
+                        aria-expanded="false"
+                        data-bs-toggle="dropdown"
+                        type="button"
+                      >
+                        <i class="fas fa-ellipsis-v text-gray-400"></i>
+                      </button>
+                      <div
+                        class="dropdown-menu shadow dropdown-menu-end animated--fade-in"
+                      >
+                        <p class="text-center dropdown-header">
+                          dropdown header:
+                        </p>
+                        <a class="dropdown-item" href="#">&nbsp;Action</a
+                        ><a class="dropdown-item" href="#"
+                          >&nbsp;Another action</a
+                        >
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#"
+                          >&nbsp;Something else here</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body m-2">
+                    <div
+                      class="chart-area"
+                      style="width: 1100px; height: 550px"
+                    >
+                      <canvas id="barchart"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-5 col-xl-4">
+                <div class="card shadow mb-4">
+                  <div
+                    class="card-header d-flex justify-content-between align-items-center"
+                  >
+                    <h6 class="text-primary fw-bold m-0">
+                      Number of products in each category
+                    </h6>
+                    <div class="dropdown no-arrow">
+                      <button
+                        class="btn btn-link btn-sm dropdown-toggle"
+                        aria-expanded="false"
+                        data-bs-toggle="dropdown"
+                        type="button"
+                      >
+                        <i class="fas fa-ellipsis-v text-gray-400"></i>
+                      </button>
+                      <div
+                        class="dropdown-menu shadow dropdown-menu-end animated--fade-in"
+                      >
+                        <p class="text-center dropdown-header">
+                          dropdown header:
+                        </p>
+                        <a class="dropdown-item" href="#">&nbsp;Action</a
+                        ><a class="dropdown-item" href="#"
+                          >&nbsp;Another action</a
+                        >
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#"
+                          >&nbsp;Something else here</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="chart-area" style="width: 100%; height: 100%">
+                      <canvas id="polar-chart"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const DATA_COUNT = 5;
+
+      let labels = {{polar_labels|safe }};
+      let values = {{polar_values}};
+
+
+
+              var data = {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Dataset 1',
+            data: values, // Sample data values
+            backgroundColor: [
+          'rgba(130, 201, 169, 0.5)',
+          'rgba(237, 151, 87, 0.5)',
+          'rgba(142, 214, 255, 0.5)',
+          'rgba(226, 126, 180, 0.5)',
+          'rgba(115, 179, 212, 0.5)',
+          'rgba(191, 128, 255, 0.5)',
+          'rgba(196, 207, 84, 0.5)',
+          'rgba(0, 168, 150, 0.5)',
+      ]
+          }
+        ]
+      };
+      var config = {
+        type: 'polarArea',
+        data: data,
+        options: {
+          responsive: true,
+          scales: {
+            r: {
+              pointLabels: {
+                font: {
+                  size: 10
+                }
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              // text: 'Number of products in each category'
+            }
+          }
+        },
+      };
+              // Create the chart
+              var ctx = document.getElementById('polar-chart').getContext('2d');
+              var myChart = new Chart(ctx, config);
+    </script>
+    <script>
+      var data = {
+          labels: {{top_products|safe }},
+          datasets: [{
+              label: 'Data',
+              data: {{top_quantity}},
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)', // Red
+                  'rgba(54, 162, 235, 0.2)', // Blue
+                  'rgba(255, 206, 86, 0.2)', // Yellow
+                  'rgba(75, 192, 192, 0.2)', // Teal
+                  'rgba(153, 102, 255, 0.2)', // Purple
+                  'rgba(255, 159, 64, 0.2)', // Orange
+                  'rgba(128, 0, 128, 0.2)',  // Purple
+                  'rgba(0, 128, 0, 0.2)',   // Green
+                  'rgba(255, 192, 203, 0.2)', // Pink
+                  'rgba(0, 255, 255, 0.2)'  // Aqua
+              ],
+
+              borderWidth: 5,
+          }]
+      };
+
+      // Chart configuration
+      var config = {
+          type: 'bar',
+          data: data,
+          options: {
+              scales: {
+                  y: {
+                      beginAtZero: true
+                  }
+              }
+          }
+      };
+
+      // Create the bar chart
+      var myChart = new Chart(document.getElementById('barchart'), config);
+    </script>
+  </body>
+</html>

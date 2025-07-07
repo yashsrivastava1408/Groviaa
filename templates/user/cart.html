@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopping Cart - EcoMart</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background-color: #000;
+        color: #f5f5f5;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .navigation {
+        background-color: #1a1a1a;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .navigation h2 a {
+        color: #00e5ff;
+        text-decoration: none;
+      }
+
+      .card {
+        background-color: #1e1e1e;
+        color: #fff;
+        border: none;
+        animation: fadeInUp 0.6s ease forwards;
+      }
+
+      .table th,
+      .table td {
+        color: #ddd;
+        vertical-align: middle;
+      }
+
+      .btn-primary {
+        background-color: #4caf50;
+        border: none;
+      }
+
+      .btn-primary:hover {
+        background-color: #43a047;
+      }
+
+      .btn-danger {
+        background-color: #e53935;
+        border: none;
+      }
+
+      .btn-danger:hover {
+        background-color: #d32f2f;
+      }
+
+      .btn-secondary {
+        background-color: #616161;
+        border: none;
+      }
+
+      .btn-secondary:hover {
+        background-color: #757575;
+      }
+
+      input[type="text"],
+      input[type="number"] {
+        background-color: #2c2c2c;
+        color: white;
+        border: 1px solid #444;
+        padding: 5px;
+        border-radius: 4px;
+      }
+
+      h1 {
+        color: #00e5ff;
+        margin-bottom: 20px;
+      }
+
+      #coupon_code {
+        width: 200px;
+      }
+
+      @keyframes fadeInUp {
+        0% {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .table tr:hover {
+        background-color: #2a2a2a;
+      }
+
+      .card:hover {
+        box-shadow: 0 6px 16px rgba(0, 255, 150, 0.2);
+        transition: box-shadow 0.3s ease;
+      }
+    </style>
+  </head>
+
+  <body>
+    <br />
+    <div class="main">
+      <div class="navigation">
+        <h2><a href="/">EcoMart</a></h2>
+      </div>
+    </div>
+
+    <div class="container mt-5 mb-5">
+      <div class="card shadow-lg p-4 rounded">
+        <div class="row g-0">
+          <div class="col-md-12">
+            <h1>Shopping Cart</h1>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Product Name</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Subtotal</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="cart-items">
+                {% if cart_items %}
+                {% for item in cart_items %}
+                <tr>
+                  <th>{{ loop.index }}</th>
+                  <td>{{ item.product_name }}</td>
+                  <td>₹{{ item.price }}</td>
+                  <td>
+                    <input
+                      type="number"
+                      name="quantity"
+                      value="{{ item.quantity }}"
+                      disabled
+                    />
+                  </td>
+                  <td>₹{{ item.price * item.quantity }}</td>
+                  <td>
+                    <a href="/cart/del/{{item.cart_id}}">
+                      <button class="btn btn-danger">Remove</button>
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                  <td colspan="6">Your cart is empty.</td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+
+            <div class="d-flex justify-content-end align-items-center mt-4">
+              {% if cart_items %}
+              <h4 id="total-amount" class="mr-3">Total: ₹{{ total }}</h4>
+              <form action="/cart/place_order/{{user_id}}" method="POST">
+                <input type="hidden" name="user_id" value="{{ user_id }}" />
+                <input
+                  type="hidden"
+                  id="hidden-total"
+                  name="total"
+                  value="{{ total }}"
+                />
+                <button
+                  type="submit"
+                  class="btn btn-primary ml-2"
+                  onclick="placeOrder()"
+                >
+                  Place Order
+                </button>
+              </form>
+              {% else %}
+              <button
+                class="btn btn-primary ml-3"
+                onclick="location.href='/home'"
+              >
+                Let's Shop
+              </button>
+              {% endif %}
+            </div>
+
+            <div class="mt-4">
+              <input
+                type="text"
+                id="coupon_code"
+                name="coupon_code"
+                placeholder="Coupon Code"
+              />
+              <button
+                type="button"
+                id="apply_coupon"
+                class="btn btn-secondary ml-2"
+                onclick="applyCoupon()"
+              >
+                Apply Coupon
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function applyCoupon() {
+        const couponInput = document.getElementById("coupon_code");
+        const totalAmountElement = document.getElementById("hidden-total");
+        const currentTotal = parseInt(totalAmountElement.value);
+        const couponCode = couponInput.value.trim();
+
+        if (couponCode === "ECOMART25") {
+          const discountedTotal = Math.floor(currentTotal * 0.75);
+          totalAmountElement.setAttribute("value", discountedTotal);
+          document.getElementById("total-amount").textContent =
+            "Total: ₹" + discountedTotal;
+          couponInput.setAttribute("disabled", true);
+          document
+            .getElementById("apply_coupon")
+            .setAttribute("disabled", true);
+          alert("Coupon applied: 25% off!");
+        } else {
+          alert("Invalid coupon code. Please enter a valid code.");
+        }
+      }
+
+      function placeOrder() {
+        alert("Order placed successfully!");
+      }
+    </script>
+  </body>
+</html>

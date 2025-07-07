@@ -1,0 +1,202 @@
+swagger: "2.0"
+info:
+  title: Flask RESTful API Documentation
+  version: "1.0"
+paths:
+  /categories:
+    get:
+      summary: Get list of categories
+      responses:
+        200:
+          description: Successful response
+    post:
+      summary: Create a new category
+      parameters:
+        - in: body
+          name: category
+          description: Category data to be created
+          required: true
+          schema:
+            $ref: "#/definitions/CategoryInput"
+      responses:
+        201:
+          description: Category created successfully
+        404:
+          description: Admin not found or unauthorized
+  /categories/{category_id}:
+    get:
+      summary: Get category by ID
+      parameters:
+        - in: path
+          name: category_id
+          description: ID of the category to retrieve
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Successful response
+        404:
+          description: Category not found
+    put:
+      summary: Update a category by ID
+      parameters:
+        - in: path
+          name: category_id
+          description: ID of the category to update
+          required: true
+          type: integer
+        - in: body
+          name: category
+          description: Category data to be updated
+          required: true
+          schema:
+            $ref: "#/definitions/CategoryInput"
+      responses:
+        201:
+          description: Category name changed
+        404:
+          description: Category not found or unauthorized
+    delete:
+      summary: Delete a category by ID
+      parameters:
+        - in: path
+          name: category_id
+          description: ID of the category to delete
+          required: true
+          type: integer
+        - in: body
+          name: credentials
+          description: Admin credentials for authorization
+          required: true
+          schema:
+            $ref: "#/definitions/Credentials"
+      responses:
+        201:
+          description: Category deleted
+        404:
+          description: Category not found or unauthorized
+  /products:
+    get:
+      summary: Get list of products
+      responses:
+        200:
+          description: Successful response
+    post:
+      summary: Create a new product
+      parameters:
+        - in: body
+          name: product
+          description: Product data to be created
+          required: true
+          schema:
+            $ref: "#/definitions/ProductInput"
+      responses:
+        201:
+          description: Product created successfully
+        404:
+          description: Admin not found or unauthorized
+  /products/{product_id}:
+    get:
+      summary: Get product by ID
+      parameters:
+        - in: path
+          name: product_id
+          description: ID of the product to retrieve
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Successful response
+        404:
+          description: Product not found
+    put:
+      summary: Update a product by ID
+      parameters:
+        - in: path
+          name: product_id
+          description: ID of the product to update
+          required: true
+          type: integer
+        - in: body
+          name: product
+          description: Product data to be updated
+          required: true
+          schema:
+            $ref: "#/definitions/ProductInput"
+      responses:
+        201:
+          description: Product updated successfully
+        404:
+          description: Product not found or unauthorized
+    delete:
+      summary: Delete a product by ID
+      parameters:
+        - in: path
+          name: product_id
+          description: ID of the product to delete
+          required: true
+          type: integer
+        - in: body
+          name: credentials
+          description: Admin credentials for authorization
+          required: true
+          schema:
+            $ref: "#/definitions/Credentials"
+      responses:
+        201:
+          description: Product deleted successfully
+        404:
+          description: Product not found or unauthorized
+definitions:
+  CategoryInput:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name of the category
+      email:
+        type: string
+        description: Admin's email
+      password:
+        type: string
+        description: Admin's password
+  ProductInput:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name of the product
+      email:
+        type: string
+        description: Admin's email
+      password:
+        type: string
+        description: Admin's password
+      quantity:
+        type: integer
+        description: Quantity of the product
+      price:
+        type: number
+        format: float
+        description: Price of the product
+      category:
+        type: string
+        description: Name of the category
+      category_id:
+        type: integer
+        description: ID of the category
+      description:
+        type: string
+        description: Description of the product
+      si_unit:
+        type: string
+        description: SI unit of the product
+  Credentials:
+    type: object
+    properties:
+      email:
+        type: string
+        description: Admin's email
+      password:
+        type: string
+        description: Admin's password

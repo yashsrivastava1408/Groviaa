@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='styles/header.css') }}"
+    />
+    <style>
+      .nav_container {
+        max-width: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body py-3">
+      <div class="container nav_container">
+        <a class="navbar-brand" href="/admin"
+          ><span class="fs-2"><strong>EcoMart</strong></span></a
+        ><button
+          data-bs-toggle="collapse"
+          class="navbar-toggler"
+          data-bs-target="#navcol-1"
+        >
+          <span class="visually-hidden">Toggle navigation</span
+          ><span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navcol-1">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/product_handler"
+                >Products</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/manage_category/">Category</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/dashboard">Dashboard</a>
+            </li>
+          </ul>
+          <button class="btn btn-primary" type="button">
+            <a href="/logout" class="text-decoration-none text-white">Logout</a>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <h1 class="mt-4">Add New Grocery Product</h1>
+      <form method="post" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="name">Product Name:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            name="name"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="category">Category:</label>
+          <select
+            class="form-select form-select-md mb-3"
+            aria-label=".form-select-lg example"
+            name="category"
+          >
+            <option selected>Select Category</option>
+            {% for category in categories %}
+            <option>{{category.name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="category">SI unit</label>
+          <select
+            class="form-select form-select-md mb-3"
+            aria-label=".form-select-lg example"
+            name="si_unit"
+          >
+            <option selected>Select Unit</option>
+
+            <option>Per Dozen</option>
+            <option>Per Kg</option>
+            <option>Per Litre</option>
+            <option>Per Piece</option>
+            <option>Per Packet</option>
+            <option>Per Bottle</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="price">Price:</label>
+          <input
+            type="number"
+            class="form-control"
+            id="price"
+            name="price"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="price">Best Before</label>
+          <input
+            type="date"
+            class="form-control"
+            id="price"
+            name="best_before"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="quantity">Quantity:</label>
+          <input
+            type="number"
+            class="form-control"
+            id="quantity"
+            name="quantity"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="time">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            id="description"
+            name="description"
+            required
+          />
+        </div>
+        <br />
+        <div class="form-group">
+          <label for="image">Image URL:</label>
+          <input type="file" name="file" autocomplete="off" />
+        </div>
+        <br />
+        <button type="submit" class="btn btn-primary">Add Product</button>
+      </form>
+    </div>
+    <!-- Bootstrap JS (optional, only needed if you use Bootstrap components that require JavaScript) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

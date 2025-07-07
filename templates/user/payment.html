@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="p-5 bg-light text-center">
+  <div class="container">
+    <h2>Complete Payment for Order #{{ order.id }}</h2>
+    <p>Total Amount: ₹{{ order.total }}</p>
+
+    <button class="btn btn-success btn-lg" onclick="payWithRazorpay()">Pay with Razorpay</button>
+
+    <form method="POST" action="/cod_payment/{{ order.id }}" class="d-inline ml-3">
+      <button type="submit" class="btn btn-outline-dark btn-lg">Cash on Delivery</button>
+    </form>
+  </div>
+
+  <script>
+    function payWithRazorpay() {
+      var options = {
+        "key": "YOUR_RAZORPAY_KEY_ID", // Replace with your actual Razorpay key
+        "amount": {{ order.total * 100 }},
+        "currency": "INR",
+        "name": "EcoMart",
+        "description": "Order Payment",
+        "handler": function (response) {
+          alert("Payment Successful! ID: " + response.razorpay_payment_id);
+          window.location.href = "/orders/{{ order.user_id }}";
+        },
+        "theme": {
+          "color": "#4caf50"
+        }
+      };
+      var rzp = new Razorpay(options);
+      rzp.open();
+    }
+  </script>
+</body>
+</html>

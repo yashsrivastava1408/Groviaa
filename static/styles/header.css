@@ -1,0 +1,13 @@
+a {
+  text-decoration: none;
+  color: black;
+  text-align: center;
+}
+a:hover {
+  cursor: default;
+  text-decoration: none;
+  color: black;
+}
+h2 {
+  text-align: center;
+}
