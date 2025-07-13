@@ -2,17 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Order Details</title>
 
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static',filename='styles/header.css') }}"
     />
 
     <style>
@@ -50,16 +45,16 @@
       }
 
       .table tbody tr:hover {
-        background-color: #a68521;
+        background-color: #333;
       }
 
       .btn-primary {
-        background-color: #2196f3;
+        background-color: #4caf50;
         border: none;
       }
 
       .btn-primary:hover {
-        background-color: #1976d2;
+        background-color: #43a047;
       }
 
       @keyframes fadeInUp {
@@ -78,7 +73,7 @@
   <body>
     <div class="main">
       <div class="navigation">
-        <h2><a href="/">EcoMart</a></h2>
+        <h2><a href="/">Grovia</a></h2>
       </div>
     </div>
 
@@ -86,7 +81,7 @@
       <div class="card shadow-lg p-4 mb-5 rounded">
         <div class="row g-0">
           <div class="col-md-12">
-            <h1 class="mb-4">Order Details (ID: #{{ order.id }})</h1>
+            <h1 class="mb-4 text-center">Order Details (ID: #{{ order.id }})</h1>
             <table class="table table-hover">
               <thead>
                 <tr>
@@ -96,41 +91,32 @@
                   <th>Subtotal</th>
                 </tr>
               </thead>
-              <tbody id="cart-items">
-                {% if cart_items %}
-                {% for item in items %}
-                <tr>
-                  <td>{{ item.product_name }}</td>
-                  <td>₹{{ item.amount }}</td>
-                  <td>{{ item.quantity }}</td>
-                  <td>₹{{ item.amount }}</td>
-                </tr>
-                {% endfor %}
+              <tbody>
+                {% if ordered_items %}
+                  {% for item in ordered_items %}
+                    <tr>
+                      <td>{{ item.product_name }}</td>
+                      <td>₹{{ item.product_price }}</td>
+                      <td>{{ item.quantity }}</td>
+                      <td>₹{{ item.product_price * item.quantity }}</td>
+                    </tr>
+                  {% endfor %}
                 {% else %}
-                <tr>
-                  <td colspan="4" class="text-center">No items found.</td>
-                </tr>
+                  <tr>
+                    <td colspan="4" class="text-center">No items found in this order.</td>
+                  </tr>
                 {% endif %}
               </tbody>
             </table>
 
-            <div class="d-flex justify-content-end align-items-center mt-3">
-              {% if cart_items %}
-              <h4 id="total-amount" class="mr-4">Total: ₹{{ order.total }}</h4>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+              <h4>Total: ₹{{ order.total }}</h4>
               <button
                 class="btn btn-primary"
-                onclick="location.href='/orders/{{ user_id }}'"
+                onclick="location.href='/orders/{{ order.user_id }}'"
               >
-                Go to Orders
+                Back to Orders
               </button>
-              {% else %}
-              <button
-                class="btn btn-primary"
-                onclick="location.href='/home'"
-              >
-                Let's Shop
-              </button>
-              {% endif %}
             </div>
           </div>
         </div>

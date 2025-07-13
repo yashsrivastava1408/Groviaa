@@ -63,5 +63,3 @@ def logout():
 @app.route('/testing')
 def testing():
     return render_template('user/index.html', user=agent.query(User).filter(User.id == 2).first(), categories=agent.query(Category).all(), products=agent.query(Product).all())
- 
-

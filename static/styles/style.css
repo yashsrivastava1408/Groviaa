@@ -1,161 +1,343 @@
-.product {
-  /* border: 1px solid black; */
-  width: fit-content;
-  padding: 0cm 1cm 0.5cm 1cm;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-  border-radius: 5px;
-  background-color: rgb(252, 252, 252);
+/* ================================
+   Reset & Base
+   ================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-.product-name {
-  font-family: Noto Sans;
+body {
+  color: #ffffff;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  background: linear-gradient(-45deg, #202020, #000000, #1c1c1c);
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
 }
 
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.main {
+  padding: 40px 60px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 0;
+}
+
+/* ================================
+   Navigation
+   ================================ */
 .navigation {
+  background: rgba(255, 255, 255, 0.07);
+  padding: 20px 30px;
   display: flex;
-  padding: 0cm 1cm;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  border-radius: 16px;
+  margin-bottom: 40px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.08);
+}
+.brand-title {
+  font-family: 'Orbitron', sans-serif;
+  color: #00ffcc;
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-shadow: 0 0 6px rgba(0, 255, 204, 0.6), 0 0 12px rgba(0, 255, 204, 0.4);
+}
+
+.navigation h1 {
+  color: #ffffff;
+  font-size: 2rem;
+  letter-spacing: 1px;
+  text-shadow: 0 0 5px #ffffff, 0 0 10px #f8f8f8;
+}
+
+.right-nav a {
+  color: #ffffff !important;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+ .right-nav {
+  display: flex;
+  align-items: center;
+  gap: 40px; /* Or any spacing you prefer */
+}
+
+.right-nav a:hover {
+  color: #00ffcc;
+}
+
+
+.nav-link {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  color: #00ffcc;
 }
 
 .my-name {
+  font-weight: bold;
   cursor: pointer;
 }
-.cat-menu-container {
-  display: flex;
-  column-gap: 0.3cm;
-  justify-content: center;
 
-  padding-bottom: 0.5cm;
-}
-
-.cat-menu {
-  padding: 0.3cm 0.6cm;
-  border: 1px solid white;
-  border-radius: 5px;
-  background-color: white;
-  font-size: 20px;
-}
-.right-nav {
-  display: flex;
-  column-gap: 0.5cm;
-}
-.dropdown:hover .dropdown-content {
-  display: block;
-}
+/* Dropdown */
 .dropdown {
   position: relative;
   display: inline-block;
-}
-.drop-menu {
   cursor: pointer;
 }
 
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #f7f7f7;
-  width: max-content;
-  overflow: auto;
-  border: 1px solid #dbdbdb;
-  z-index: 1;
-  margin-left: -0.5cm;
-  padding: 0cm 0.3cm;
+  background-color: #1b1b1b;
+  min-width: 180px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.6);
+  z-index: 10;
+  border-radius: 12px;
+  overflow: hidden;
+  top: 110%;
+  right: 0;
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 12px 16px;
+  text-align: left;
+  text-decoration: none;
+  color: #ffffff;
+  border-bottom: 1px solid #333;
+}
+
+.dropdown-content a:hover {
+  background: rgba(255,255,255,0.1);
+  color: #00ffcc;
+}
+
+
+/* ================================
+   Search Bar with Mic Integrated
+   ================================ */
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .searchC {
-  width: 15cm;
-  margin-top: 0.5cm;
-  margin-bottom: 0.5cm;
-  font-size: 18px;
-
-  border-radius: 100px;
-  padding: 0.2cm 0.4cm;
-  border: thin solid grey;
-}
-
-.add-to-cart {
-  font-size: 16px;
-  width: 100%;
-  padding: 0.2cm;
+  padding: 18px 25px;
+  border-radius: 25px;
   border: none;
-  border-radius: 5px;
-  background-color: #3ada3a;
+  outline: none;
+  width: 720px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding-right: 50px; /* Space for mic icon */
+}
+
+.mic-button {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
   cursor: pointer;
+  font-size: 18px;
+  color: #00ffcc;
+  transition: transform 0.2s;
 }
 
-.search-result {
-  background-color: whitesmoke;
-  padding: 0.5cm;
-  position: relative;
-  width: 80%;
-  z-index: 10;
+.mic-button:hover {
+  transform: scale(1.2);
 }
 
-.add-to-cart:hover {
-  background-color: #36cc36;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-}
-.lower {
-  overflow: scroll;
-  max-height: 79.5vh;
-}
-h2 {
-  margin: 0px 0px;
+.searchB {
+  background-color: #ffffff;
+  color: #000;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  row-gap: 1cm;
+.searchB:hover {
+  background-color: #e2e2e2;
 }
 
+/* ================================
+   Category Buttons
+   ================================ */
+.cat-menu-container {
+  text-align: center;
+  margin: 40px 0;
+  flex-wrap: wrap;
+}
+
+.cat-menu {
+  background: linear-gradient(to right, #111, #333);
+  border: 1px solid #00ffcc;
+  color: #00ffcc;
+  padding: 10px 24px;
+  margin: 8px;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 255, 204, 0.2);
+}
+
+.cat-menu:hover {
+  background: #00ffcc;
+  color: #000;
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(0, 255, 204, 0.4);
+}
+
+.cat-menu a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ================================
+   Category Section
+   ================================ */
 .category {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  max-width: 90%;
-  /* border: 1px solid black; */
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 3px;
-  padding: 1cm 0cm;
+  margin-bottom: 60px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(255,255,255,0.05);
 }
 
+/* ================================
+   Product Cards
+   ================================ */
 .product-list {
   display: flex;
   flex-wrap: wrap;
+  gap: 24px;
   justify-content: center;
-  column-gap: 0.5cm;
-  row-gap: 0.5cm;
+  margin-top: 20px;
 }
 
-img {
-  width: 200px;
-  height: 200px;
+.product {
+  background: #ffffff;
+  color: #000;
+  border-radius: 20px;
+  width: 260px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
+  transition: 0.3s ease-in-out;
 }
 
-h1 {
-  margin: 0px 0px 10px 0px;
+.product:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(255, 255, 255, 0.2);
 }
-a {
-  text-decoration: none;
-  color: black;
+
+.product img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
 }
-a:hover {
-  cursor: default;
-  text-decoration: none;
-  color: black;
+
+.product-name {
+  font-size: 1.3rem;
+  margin: 10px 0;
+  font-weight: 600;
 }
-.cat-card {
-  background-color: azure;
+
+.add-to-cart {
+  background-color: #000;
+  color: #fff;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+  margin-top: 10px;
 }
-body {
-  background-color: rgb(248, 243, 238);
+
+.add-to-cart:hover {
+  background-color: #333;
 }
-.search-buy {
-  background-color: thistle;
-  border-radius: 1px solid azure;
+
+/* ================================
+   Assistant Message
+   ================================ */
+#ai-response {
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+/* ================================
+   AI Assistant Buttons
+   ================================ */
+#aiMicBtn {
+  background-color: #28a745; /* Green */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}
+
+#aiMicBtn:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(40, 167, 69, 0.6);
+}
+
+#stopMicBtn {
+  background-color: #dc3545; /* Red */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+}
+
+#stopMicBtn:hover {
+  background-color: #c82333;
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(220, 53, 69, 0.6);
 }

@@ -1,376 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static',filename='styles/header.css') }}"
-    />
-    <style type="text/css">
-      .nav_container {
-        max-width: 100%;
-      }
-    </style>
-  </head>
-
-  <body>
-    <nav class="navbar navbar-expand-lg bg-body py-3">
-      <div class="container nav_container">
-        <a class="navbar-brand" href="/admin"
-          ><span class="fs-2"><strong>EcoMart</strong></span></a
-        ><button
-          data-bs-toggle="collapse"
-          class="navbar-toggler"
-          data-bs-target="#navcol-1"
-        >
-          <span class="visually-hidden">Toggle navigation</span
-          ><span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navcol-1">
-          <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-              <a class="nav-link active" href="/admin/product_handler"
-                >Products</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/admin/manage_category/">Category</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/admin/userbase">Users</a>
-            </li>
-          </ul>
-
-          <a href="/logout" class="text-decoration-none text-white"
-            ><button class="btn btn-primary" type="button">Logout</button>
-          </a>
-        </div>
-      </div>
-    </nav>
-
+    <title>Edit Product</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
     <div class="container mt-5 mb-5">
-      <div class="card shadow-lg p-3 mb-5 bg-white rounded">
-        <div class="row g-0">
-          <div class="col-md-6 border-end">
-            <div class="d-flex flex-column justify-content-md-around ml-6">
-              <div class="main_image">
-                <img
-                  src="/static/assets/{{product.image }}"
-                  id="main_product_image"
-                  width="90%"
-                  height="90%"
-                />
-              </div>
-              <div class="thumbnail_images"></div>
-            </div>
-          </div>
+        <div class="card shadow p-4">
+            <h2 class="mb-4">Edit Product: {{ product.name }}</h2>
+            <form method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label">Product Name</label>
+                    <input type="text" class="form-control" name="name" value="{{ product.name }}" required />
+                </div>
 
-          <div class="col-md-6">
-            <h1 class="mt-4">Edit Product ({{product.name}})</h1>
-            <form enctype="multipart/form-data" id="edit_form">
-              <div class="form-group">
-                <label for="name">Product Name:</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="name"
-                  name="name"
-                  value="{{product.name}}"
-                  required
-                />
-              </div>
+                <div class="mb-3">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" name="category" required>
+                        {% for cat in categories %}
+                        <option value="{{ cat.name }}" {% if cat.name == product.category %}selected{% endif %}>{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-              <div class="form-group">
-                <label for="category">Category:</label>
-                <select
-                  class="form-select form-select-md mb-3"
-                  aria-label=".form-select-lg example"
-                  name="category"
-                >
-                  {% for category in categories %} {% if category.name ==
-                  product.category %}
-                  <option selected>{{product.category}}</option>
-                  {% else %}
-                  <option>{{category.name}}</option>
-                  {% endif %} {% endfor %}
-                </select>
-              </div>
+                <div class="mb-3">
+                    <label class="form-label">Price</label>
+                    <input type="number" class="form-control" name="price" value="{{ product.price }}" required />
+                </div>
 
-              <div class="form-group">
-                <label for="category">SI unit</label>
-                <select
-                  class="form-select form-select-md mb-3"
-                  aria-label=".form-select-lg example"
-                  name="si_unit"
-                >
-                  <option>Select Unit</option>
+                <div class="mb-3">
+                    <label class="form-label">Quantity</label>
+                    <input type="number" class="form-control" name="quantity" value="{{ product.quantity }}" required />
+                </div>
 
-                  <option>Per Dozen</option>
-                  <option>Per Kg</option>
-                  <option>Per Litre</option>
-                  <option>Per Piece</option>
-                  <option>Per Packet</option>
-                  <option>Per Bottle</option>
-                </select>
-              </div>
+                <div class="mb-3">
+                    <label class="form-label">SI Unit</label>
+                    <select class="form-select" name="si_unit" required>
+                        {% for unit in ["Per Dozen", "Per Kg", "Per Litre", "Per Piece", "Per Packet", "Per Bottle"] %}
+                        <option {% if product.si_unit == unit %}selected{% endif %}>{{ unit }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-              <div class="form-group">
-                <label for="price">Price:</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="price"
-                  name="price"
-                  required
-                  value="{{product.price}}"
-                />
-              </div>
+                <div class="mb-3">
+                    <label class="form-label">Best Before</label>
+                    <input type="date" class="form-control" name="best_before" value="{{ product.best_before }}" required />
+                </div>
 
-              <div class="form-group">
-                <label for="price">Best Before</label>
-                <input
-                  type="date"
-                  class="form-control"
-                  id="price"
-                  name="best_before"
-                  required
-                  value="{{product.best_before}}"
-                />
-              </div>
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" name="description" rows="3" required>{{ product.description }}</textarea>
+                </div>
 
-              <div class="form-group">
-                <label for="quantity">Quantity:</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="quantity"
-                  name="quantity"
-                  required
-                  value="{{product.quantity}}"
-                />
-              </div>
+                <div class="mb-3">
+                    <label class="form-label">Update Product Image (optional)</label>
+                    <input type="file" class="form-control" name="file" accept="image/*" />
+                    {% if product.image %}
+                    <small class="text-muted">Current Image:</small><br />
+                    <img src="{{ url_for('static', filename='assets/' + product.image) }}" alt="Current Image" class="img-thumbnail mt-2" style="max-width: 200px;" />
+                    {% endif %}
+                </div>
 
-              <div class="form-group">
-                <label for="time">Description</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="description"
-                  name="description"
-                  required
-                  value="{{product.description}}"
-                />
-              </div>
-              <br />
-              <div class="form-group" hidden>
-                <label for="image">Image URL:</label>
-                <input
-                  type="text"
-                  name="image"
-                  autocomplete="off"
-                  value="{{product.image}}"
-                />
-              </div>
-              <br />
-              <button
-                type="submit"
-                class="btn btn-primary"
-                onclick="update_product()"
-              >
-                Update Product
-              </button>
+                <button type="submit" class="btn btn-primary">Update Product</button>
+                <a href="/admin/product_handler" class="btn btn-secondary ms-2">Cancel</a>
             </form>
-            <br />
-            <button
-              type="submit"
-              class="btn btn-danger"
-              onclick="delete_product()"
-            >
-              Delete Product
-            </button>
-          </div>
-
-          <div class="buttons d-flex flex-row mt-5 gap-3"></div>
         </div>
-      </div>
     </div>
-<<<<<<< Updated upstream
-    <div class="container">
-      <h1 class="mt-4">Edit Product</h1>
-      <form method="post" enctype="multipart/form-data">
-        <div class="form-group">
-          <label for="name">Product Name:</label>
-          <input
-            type="text"
-            class="form-control"
-            id="name"
-            name="name"
-            value="{{product.name}}"
-            required
-            
-            id="category"
-            name="category"
-            required
-            value="{{product.category}}"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="price">Price:</label>
-          <input
-            type="number"
-            class="form-control"
-            id="price"
-            name="price"
-            value="{{product.price}}"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="quantity">Quantity:</label>
-          <input
-            type="number"
-            class="form-control"
-            id="quantity"
-            name="quantity"
-            value="{{product.quantity}}"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="time">Created On:</label>
-          <input
-            type="text"
-            class="form-control"
-            id="time"
-            name="time"
-            value="{{product.time}}"
-            disabled
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="image">Image URL:</label>
-          <input
-            type="text"
-            class="form-control"
-            id="image"
-            name="image"
-            value="{{product.image}}"
-            required
-          />
-        </div>
-        <br />
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
-    </div>
-    <!-- Bootstrap JS (optional, only needed if you use Bootstrap components that require JavaScript) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-=======
-
-    <!-- Bootstrap JS (optional, only needed if you use Bootstrap components that require JavaScript) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-                  function delete_product() {
-                    var r = alert("Are you sure you want to delete this product?");
-
-                      myDataObject = {email: prompt("Enter admin email"), password: prompt("Enter admin's password")}
-
-                      remove({{ product.id }}, myDataObject);
-                      // window.location.href = "/admin";
-                      setTimeout(function(){ window.location.href = "/admin"; }, 1000);
-
-                  }
-
-                  function update_product() {
-                    var r = alert("Are you sure you want to update this product?");
-
-                      myDataObject = {email: prompt("Enter admin email"), password: prompt("Enter admin's password")}
-                      formData = new FormData(document.getElementById("edit_form")).forEach(function(value, key){
-                          myDataObject[key] = value;
-                      });
-                      //merge formData and myDataObject
-
-                      final = {...myDataObject, ...formData}
-                      console.log(JSON.stringify(final))
-                      update({{ product.id }}, final);
-                      // window.location.href = "/admin";
-                      setTimeout(function(){ window.location.href = "/admin"; }, 1000);
-
-                    }
-
-
-
-                  function remove(id, req_body) {
-
-                    fetch("http://127.0.0.1:5000/api/product/" + id, {
-                      method: "DELETE",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify(req_body),
-                    })
-                      .then((response) => {
-                        return response.json();
-                      })
-                      .then((data) =>
-                        // this is the data we get after doing the delete request, do whatever you want with this data
-                        alert(data.message)
-                      );
-                  }
-                  function update(id, req_body) {
-
-                    fetch("http://127.0.0.1:5000/api/product/" + id, {
-                      method: "PUT",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify(req_body),
-                    })
-                      .then((response) => {
-                        return response.json();
-                      })
-                      .then((data) =>
-                        // this is the data we get after doing the delete request, do whatever you want with this data
-                        alert(data.message)
-                      ).catch((err) => {
-                        alert(err)
-                      });
-                  }
-      //             function update_product() {
-      //     var r = confirm("Are you sure you want to update this product?");
-
-
-      //     var myDataObject = {
-      //         email: prompt("Enter admin email"),
-      //         password: prompt("Enter admin's password")
-      //     };
-
-      //     var formData = new FormData(document.getElementById("edit_form"));
-      //     var formDataObject = {};
-      //     formData.forEach(function (value, key) {
-      //         formDataObject[key] = value;
-      //     });
-
-      //     var finalData = { ...myDataObject, ...formDataObject };
-
-
-      //     var productId = "{{ product.id }}"; // Assuming this is how you're embedding the product ID in the HTML template
-
-      //     update(productId, finalData);
-      // }
-    </script>
->>>>>>> Stashed changes
-  </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

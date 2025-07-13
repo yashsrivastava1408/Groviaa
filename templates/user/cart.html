@@ -1,241 +1,443 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Shopping Cart - EcoMart</title>
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    />
-    <style>
-      body {
-        background-color: #000;
-        color: #f5f5f5;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shopping Cart</title>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* ===== Reset & Base ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
 
-      .navigation {
-        background-color: #1a1a1a;
-        padding: 20px;
-        text-align: center;
-      }
+body {
+  color: #ffffff;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  background: linear-gradient(-45deg, #202020, #000000, #1c1c1c);
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
+}
 
-      .navigation h2 a {
-        color: #00e5ff;
-        text-decoration: none;
-      }
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 
-      .card {
-        background-color: #1e1e1e;
-        color: #fff;
-        border: none;
-        animation: fadeInUp 0.6s ease forwards;
-      }
+.main {
+  padding: 40px 60px;
+}
 
-      .table th,
-      .table td {
-        color: #ddd;
-        vertical-align: middle;
-      }
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 90vh;
+  padding: 40px 20px;
+}
 
-      .btn-primary {
-        background-color: #4caf50;
-        border: none;
-      }
+/* ===== Navigation ===== */
+.navigation {
+  background: rgba(255, 255, 255, 0.07);
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 16px;
+  margin-bottom: 40px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.08);
+}
 
-      .btn-primary:hover {
-        background-color: #43a047;
-      }
+.navigation h2 a {
+  font-family: 'Orbitron', sans-serif;
+  color: #00ffcc;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-shadow: 0 0 6px rgba(0, 255, 204, 0.6), 0 0 12px rgba(0, 255, 204, 0.4);
+  text-decoration: none;
+}
 
-      .btn-danger {
-        background-color: #e53935;
-        border: none;
-      }
+.navigation h2 a:hover {
+  color: #ffffff;
+}
 
-      .btn-danger:hover {
-        background-color: #d32f2f;
-      }
+/* ===== Card ===== */
+.card {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(255,255,255,0.07);
+  padding: 40px 30px;
+  max-width: 900px;
+  width: 100%;
+}
 
-      .btn-secondary {
-        background-color: #616161;
-        border: none;
-      }
+.card h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.2rem;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #00ffcc;
+  text-shadow: 0 0 6px rgba(0, 255, 204, 0.6), 0 0 12px rgba(0, 255, 204, 0.4);
+}
 
-      .btn-secondary:hover {
-        background-color: #757575;
-      }
+/* ===== Table ===== */
+.table {
+  margin-bottom: 30px;
+}
 
-      input[type="text"],
-      input[type="number"] {
-        background-color: #2c2c2c;
-        color: white;
-        border: 1px solid #444;
-        padding: 5px;
-        border-radius: 4px;
-      }
+.table th, .table td {
+  color: #ffffff;
+  vertical-align: middle;
+  padding: 16px 12px;
+  font-size: 1rem;
+  border-color: rgba(255, 255, 255, 0.1);
+}
 
-      h1 {
-        color: #00e5ff;
-        margin-bottom: 20px;
-      }
+.table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  transition: background-color 0.3s;
+}
 
-      #coupon_code {
-        width: 200px;
-      }
+.table input[type="number"] {
+  width: 60px;
+  padding: 5px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #222;
+  color: #fff;
+}
 
-      @keyframes fadeInUp {
-        0% {
-          opacity: 0;
-          transform: translateY(30px);
-        }
-        100% {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+/* ===== Totals ===== */
+#total-amount {
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: #00ffcc;
+  margin-right: 40px;
+}
 
-      .table tr:hover {
-        background-color: #2a2a2a;
-      }
+/* ===== Coupon Input ===== */
+#coupon_code {
+  padding: 12px 18px;
+  border-radius: 25px;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  width: 220px;
+  margin-top: 15px;
+}
 
-      .card:hover {
-        box-shadow: 0 6px 16px rgba(0, 255, 150, 0.2);
-        transition: box-shadow 0.3s ease;
-      }
-    </style>
-  </head>
+#coupon_code::placeholder {
+  color: #ddd;
+}
 
-  <body>
-    <br />
-    <div class="main">
-      <div class="navigation">
-        <h2><a href="/">EcoMart</a></h2>
-      </div>
+#coupon-list button {
+  transition: transform 0.2s;
+}
+
+#coupon-list button:hover {
+  transform: scale(1.05);
+}
+/* ===== Buttons ===== */
+.btn {
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 30px;
+  font-weight: 500;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+  margin: 8px 12px 8px 0; /* top, right, bottom, left spacing */
+}
+
+.btn:last-child {
+  margin-right: 0; /* remove extra space after last button */
+}
+
+.btn-primary {
+  background-color: #00ffcc;
+  border: none;
+  color: #000;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background-color: #00e6b3;
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(0, 255, 204, 0.4);
+}
+
+.btn-secondary, .btn-info {
+  font-weight: 500;
+}
+
+.btn-danger:hover {
+  transform: scale(1.05);
+}
+
+
+/* ===== AI Assistant ===== */
+#ai-controls {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+}
+
+#ai-controls button {
+  font-size: 14px;
+  padding: 10px 16px;
+  border-radius: 20px;
+}
+
+#aiMicBtn {
+  background-color: #28a745;
+  border: none;
+  color: #fff;
+  font-weight: 600;
+}
+
+#aiMicBtn:hover {
+  background-color: #218838;
+}
+
+#stopMicBtn {
+  background-color: #dc3545;
+  border: none;
+  color: #fff;
+  font-weight: 600;
+}
+
+#stopMicBtn:hover {
+  background-color: #c82333;
+}
+
+#ai-response {
+  color: #00ffcc;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-top: 8px;
+}
+.table-wrapper {
+  display: flex;
+  justify-content: center;
+  overflow-x: auto; /* allows horizontal scroll if needed on small screens */
+}
+
+.table {
+  width: auto; /* keeps table content width tight */
+  max-width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  text-align: center;
+  padding: 12px 30px;
+}
+
+
+</style>
+</head>
+
+<body>
+  <div class="main">
+    <div class="navigation">
+      <h2><a href="/">Grovia</a></h2>
     </div>
+  </div>
 
-    <div class="container mt-5 mb-5">
-      <div class="card shadow-lg p-4 rounded">
-        <div class="row g-0">
-          <div class="col-md-12">
-            <h1>Shopping Cart</h1>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Product Name</th>
-                  <th>Price</th>
-                  <th>Quantity</th>
-                  <th>Subtotal</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="cart-items">
-                {% if cart_items %}
-                {% for item in cart_items %}
-                <tr>
-                  <th>{{ loop.index }}</th>
-                  <td>{{ item.product_name }}</td>
-                  <td>₹{{ item.price }}</td>
-                  <td>
-                    <input
-                      type="number"
-                      name="quantity"
-                      value="{{ item.quantity }}"
-                      disabled
-                    />
-                  </td>
-                  <td>₹{{ item.price * item.quantity }}</td>
-                  <td>
-                    <a href="/cart/del/{{item.cart_id}}">
-                      <button class="btn btn-danger">Remove</button>
-                    </a>
-                  </td>
-                </tr>
-                {% endfor %}
-                {% else %}
-                <tr>
-                  <td colspan="6">Your cart is empty.</td>
-                </tr>
-                {% endif %}
-              </tbody>
-            </table>
+  <div class="container mt-5 mb-5">
+    <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+      <h1>Shopping Cart</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th><th>Product Name</th><th>Price</th><th>Qty</th><th>Subtotal</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="cart-items">
+          {% if cart_items %}
+            {% for item in cart_items %}
+              <tr>
+                <th>{{ loop.index }}</th>
+                <td>{{ item.product_name }}</td>
+                <td>₹{{ item.price }}</td>
+                <td><input type="number" value="{{ item.quantity }}" disabled /></td>
+                <td>₹{{ item.price * item.quantity }}</td>
+                <td><a href="/cart/del/{{ item.cart_id }}"><button class="btn btn-danger btn-sm">Remove</button></a></td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr><td colspan="6">Your cart is empty.</td></tr>
+          {% endif %}
+        </tbody>
+      </table>
 
-            <div class="d-flex justify-content-end align-items-center mt-4">
-              {% if cart_items %}
-              <h4 id="total-amount" class="mr-3">Total: ₹{{ total }}</h4>
-              <form action="/cart/place_order/{{user_id}}" method="POST">
-                <input type="hidden" name="user_id" value="{{ user_id }}" />
-                <input
-                  type="hidden"
-                  id="hidden-total"
-                  name="total"
-                  value="{{ total }}"
-                />
-                <button
-                  type="submit"
-                  class="btn btn-primary ml-2"
-                  onclick="placeOrder()"
-                >
-                  Place Order
-                </button>
-              </form>
-              {% else %}
-              <button
-                class="btn btn-primary ml-3"
-                onclick="location.href='/home'"
-              >
-                Let's Shop
-              </button>
-              {% endif %}
-            </div>
+      <div class="d-flex justify-content-end align-items-center">
+        {% if cart_items %}
+          <h4 id="total-amount">Total: ₹{{ total }}</h4>
+          <form action="/cart/place_order/{{ user_id }}" method="POST">
+            <input type="hidden" name="user_id" value="{{ user_id }}"/>
+            <input type="hidden" id="hidden-total" name="total" value="{{ total }}"/>
+            <button type="submit" class="btn btn-primary ml-3" onclick="placeOrder()">Place Order</button>
+          </form>
+        {% else %}
+          <button class="btn btn-primary ml-3" onclick="location.href='/home'">Let's Shop</button>
+        {% endif %}
+      </div>
 
-            <div class="mt-4">
-              <input
-                type="text"
-                id="coupon_code"
-                name="coupon_code"
-                placeholder="Coupon Code"
-              />
-              <button
-                type="button"
-                id="apply_coupon"
-                class="btn btn-secondary ml-2"
-                onclick="applyCoupon()"
-              >
-                Apply Coupon
-              </button>
-            </div>
-          </div>
+      <br />
+      <div>
+        <input type="text" id="coupon_code" placeholder="Coupon Code"/>
+        <button class="btn btn-secondary ml-2" id="apply_coupon" onclick="applyCoupon()">Apply Coupon</button>
+        <button class="btn btn-info btn-sm ml-2" onclick="toggleCouponList()">Show Coupons</button>
+        <div id="coupon-list">
+          <button class="btn btn-outline-success coupon-btn" onclick="autoApply('Grovia25')">Grovia25</button>
+          <button class="btn btn-outline-success coupon-btn" onclick="autoApply('SAVE20')">SAVE20</button>
+          <button class="btn btn-outline-success coupon-btn" onclick="autoApply('FRESH5')">FRESH5</button>
+          <button class="btn btn-outline-success coupon-btn" onclick="autoApply('GET10')">GET10</button>
         </div>
       </div>
     </div>
+  </div>
 
-    <script>
-      function applyCoupon() {
-        const couponInput = document.getElementById("coupon_code");
-        const totalAmountElement = document.getElementById("hidden-total");
-        const currentTotal = parseInt(totalAmountElement.value);
-        const couponCode = couponInput.value.trim();
+  <!-- AI Assistant Buttons -->
+  <div id="ai-controls">
+    <button id="aiMicBtn" class="btn btn-primary">🎙️ Talk</button>
+    <button id="stopMicBtn" class="btn btn-danger" style="display:none;">⛔ Stop</button>
+    <p id="ai-response" style="margin-top: 8px;"></p>
+  </div>
 
-        if (couponCode === "ECOMART25") {
-          const discountedTotal = Math.floor(currentTotal * 0.75);
-          totalAmountElement.setAttribute("value", discountedTotal);
-          document.getElementById("total-amount").textContent =
-            "Total: ₹" + discountedTotal;
-          couponInput.setAttribute("disabled", true);
-          document
-            .getElementById("apply_coupon")
-            .setAttribute("disabled", true);
-          alert("Coupon applied: 25% off!");
-        } else {
-          alert("Invalid coupon code. Please enter a valid code.");
-        }
+  <script>
+    // Load voice
+    let selectedVoice = null;
+    const synth = window.speechSynthesis;
+    function loadVoices() {
+      return new Promise(resolve => {
+        const voices = synth.getVoices();
+        if (voices.length) return resolve(voices);
+        synth.onvoiceschanged = () => resolve(synth.getVoices());
+      });
+    }
+    async function selectVoice() {
+      const voices = await loadVoices();
+      selectedVoice = voices.find(v => v.name.toLowerCase().includes("female")) || voices[0];
+    }
+    selectVoice();
+
+    // AI Mic setup
+    let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = "en-IN";
+    recognition.continuous = true;
+    recognition.interimResults = false;
+
+    const micBtn = document.getElementById("aiMicBtn");
+    const stopBtn = document.getElementById("stopMicBtn");
+    const responseBox = document.getElementById("ai-response");
+
+    micBtn.onclick = () => {
+      recognition.start();
+      micBtn.style.display = "none";
+      stopBtn.style.display = "inline-block";
+      responseBox.innerText = "Listening... Try: 'apply Grovia25', 'remove first item', 'show coupons'";
+    };
+
+    stopBtn.onclick = () => {
+      recognition.stop();
+      micBtn.style.display = "inline-block";
+      stopBtn.style.display = "none";
+      responseBox.innerText = "Assistant stopped.";
+    };
+
+    recognition.onend = () => {
+      recognition.start();
+    };
+
+    recognition.onerror = (e) => {
+      console.error("Speech error:", e.error);
+      setTimeout(() => recognition.start(), 1000);
+    };
+
+    recognition.onresult = async (event) => {
+      const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+      console.log("You said:", transcript);
+
+      const response = await fetch("/ai-assistant", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: transcript })
+      });
+
+      const data = await response.json();
+      responseBox.innerText = "AI: " + data.reply;
+
+      const utter = new SpeechSynthesisUtterance(data.reply);
+      utter.pitch = 1.1;
+      utter.rate = 1;
+
+      loadVoices().then(voices => {
+        if (!selectedVoice) selectedVoice = voices.find(v => v.name.toLowerCase().includes("female")) || voices[0];
+        utter.voice = selectedVoice;
+
+        if (synth.speaking) synth.cancel();
+        setTimeout(() => synth.speak(utter), 250);
+      });
+
+      // Handle actions
+      if (data.action === "apply_coupon") {
+        applyCoupon();
+      } else if (data.action === "show_coupons") {
+        toggleCouponList(true);
+      } else if (data.action && data.action.startsWith("/")) {
+        setTimeout(() => window.location.href = data.action, 3000);
+      } else {
+        setTimeout(() => location.reload(), 3000);
       }
+    };
 
-      function placeOrder() {
-        alert("Order placed successfully!");
+    // Coupon logic
+    function applyCoupon() {
+      const code = document.getElementById("coupon_code").value.trim().toUpperCase();
+      const totalInput = document.getElementById("hidden-total");
+      const totalAmount = parseFloat(totalInput.value);
+
+      if (code === "Grovia25") {
+        const discounted = Math.floor(totalAmount * 0.75);
+        totalInput.value = discounted;
+        document.getElementById("total-amount").textContent = "Total: ₹" + discounted;
+        document.getElementById("coupon_code").disabled = true;
+        document.getElementById("apply_coupon").disabled = true;
+        alert("Coupon applied: 25% off!");
+      } else {
+        alert("Invalid coupon.");
       }
-    </script>
-  </body>
+    }
+
+    function autoApply(code) {
+      document.getElementById("coupon_code").value = code;
+      applyCoupon();
+    }
+
+    function toggleCouponList(forceShow = false) {
+      const list = document.getElementById("coupon-list");
+      list.style.display = forceShow || list.style.display === "none" ? "block" : "none";
+    }
+
+    function placeOrder() {
+      alert("Order placed successfully!");
+    }
+
+    // Auto-start mic
+    window.onload = () => {
+      micBtn.click();
+    };
+  </script>
+</body>
 </html>

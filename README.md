@@ -1,13 +1,13 @@
-EcoMart
+Grovia
 Demo Video :movie_camera: 
-EcoMart is an e-commerce platform focused on environmentally friendly and sustainable products. This platform aims to connect consumers with products that have a positive impact on the environment.
+Grovia is an e-commerce platform focused on environmentally friendly and sustainable products. This platform aims to connect consumers with products that have a positive impact on the environment.
 Application Snapshots
 <div class="carousel">
     <details> <summary>Admin's Dashboard</summary>
-  <img src="https://raw.githubusercontent.com/namansehwal/EcoMart/main/static/admin_page.png" alt="Image 1" width='80%'>
+  <img src="https://raw.githubusercontent.com/namansehwal/Grovia/main/static/admin_page.png" alt="Image 1" width='80%'>
             </details>
- <details> <summary>Homepage</summary> <img src="https://raw.githubusercontent.com/namansehwal/EcoMart/main/static/user.png" alt="Image 2"  width='80%'>   </details>
-  <details><summary>Product Card</summary> <img src="https://raw.githubusercontent.com/namansehwal/EcoMart/main/static/product.png" alt="Image 3"  width='80%'>   </details>
+ <details> <summary>Homepage</summary> <img src="https://raw.githubusercontent.com/namansehwal/Grovia/main/static/user.png" alt="Image 2"  width='80%'>   </details>
+  <details><summary>Product Card</summary> <img src="https://raw.githubusercontent.com/namansehwal/Grovia/main/static/product.png" alt="Image 3"  width='80%'>   </details>
 </div>
 Table of Contents
 
@@ -19,7 +19,7 @@ Contributing
 License
 
 Introduction
-EcoMart is built with the goal of promoting eco-friendly products and practices. It provides a user-friendly interface for users to explore, search, and purchase products that align with sustainability values. Whether you're a conscious consumer or a seller of sustainable products, EcoMart provides a platform to connect and contribute to a greener future.
+Grovia is built with the goal of promoting eco-friendly products and practices. It provides a user-friendly interface for users to explore, search, and purchase products that align with sustainability values. Whether you're a conscious consumer or a seller of sustainable products, Grovia provides a platform to connect and contribute to a greener future.
 Features
 
 Product Listings: Browse through a wide range of sustainable products.
@@ -34,11 +34,11 @@ API Documentation
 :rocket: Quick Start
 Run the site locally
 Installation
-To set up EcoMart locally, follow these steps:
+To set up Grovia locally, follow these steps:
 
 Clone the repository:
-bashgit clone https://github.com/namansehwal/EcoMart.git
-cd EcoMart
+bashgit clone https://github.com/namansehwal/Grovia.git
+cd Grovia
 
 Create a virtual environment:
 bashpython3 -m venv venv
@@ -63,7 +63,7 @@ bashpython application.py
 :open_file_folder: What's inside?
 A quick look at the folder structure of this project.
 .
-EcoMart/
+Grovia/
 ┣ static/
 ┃ ┣ assets/
 ┃ ┣ styles/
