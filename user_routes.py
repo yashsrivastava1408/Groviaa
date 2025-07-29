@@ -126,7 +126,6 @@ def my_orders(pid):
     orders = agent.query(Order_Detail).filter(Order_Detail.user_id == pid).all()
     return render_template('user/orders.html', orders=orders)
 
-# ---------- Ordered Products ----------
 @app.route('/ai-assistant', methods=['POST'])
 @login_required
 def ai_assistant():
@@ -138,102 +137,95 @@ def ai_assistant():
 
     selected_product = session.get('selected_product')
 
-    # Step 1: If user already selected a product and now giving quantity
-
-    if selected_product:
-    # ✅ Step 1: Convert number words to digits
-     word_to_num = {
+    # ✅ Convert number words to digits
+    word_to_num = {
         "one": "1", "two": "2", "three": "3", "four": "4",
         "five": "5", "six": "6", "seven": "7", "eight": "8",
         "nine": "9", "ten": "10"
     }
-
-    # ✅ Step 2: Replace number words in message (safely using word boundaries)
-     for word, digit in word_to_num.items():
+    for word, digit in word_to_num.items():
         message = re.sub(rf"\b{word}\b", digit, message)
 
-    # ✅ Step 3: Remove extra units like 'can', 'packet', etc.
-     message = re.sub(r"(packet|packets|can|cans|kg|kgs|gms|grams|items|units)", "", message)
+    # ✅ Remove units
+    message = re.sub(r"(packet|packets|can|cans|kg|kgs|gms|grams|items|units|liter)", "", message)
 
-    # ✅ Step 4: Extract quantity
-     match = re.search(r'(\d+)', message)
-     if match:
-        qty = int(match.group(1))
-        product = agent.query(Product).filter(Product.id == selected_product['id']).first()
-        if product:
-            new_cart = Cart(
-                user_id=session['user'],
-                product_id=product.id,
-                product_name=product.name,
-                quantity=qty,
-                price=product.price
-            )
-            agent.add(new_cart)
-            agent.commit()
-            session.pop('selected_product', None)
-            reply = f"Added {qty} x {product.name} to your cart, {name}."
-            action = f"/cart/{user.id}"
-            return jsonify({'reply': reply, 'action': action})
+    # ✅ Step 1: Add quantity if product already selected
+    if selected_product:
+        match = re.search(r'(\d+)', message)
+        if match:
+            qty = int(match.group(1))
+            product = agent.query(Product).filter(Product.id == selected_product['id']).first()
+            if product:
+                new_cart = Cart(
+                    user_id=session['user'],
+                    product_id=product.id,
+                    product_name=product.name,
+                    quantity=qty,
+                    price=product.price
+                )
+                agent.add(new_cart)
+                agent.commit()
+                session.pop('selected_product', None)
+                reply = f"Added {qty} x {product.name} to your cart, {name}."
+                action = f"/cart/{user.id}"
+                return jsonify({'reply': reply, 'action': action})
 
-
-
-    # Step 2: Detect product name and redirect
-    # Step 2: Detect product name and redirect
-    # Step 2: Detect product name and redirect
+    # ✅ Step 2: Detect product name
     all_products = agent.query(Product).all()
     for product in all_products:
         pname = product.name.lower()
         if pname in message or any(word in pname.split() for word in message.split()):
             session['selected_product'] = {
-               'id': product.id,
-               'name': product.name,
-               'price': product.price
+                'id': product.id,
+                'name': product.name,
+                'price': product.price
             }
             reply = f"Taking you to the {product.name} page. The price is ₹{product.price} per {product.si_unit.lower()}."
             action = f"/product/{product.id}"
             return jsonify({'reply': reply, 'action': action})
 
-@app.route('/ordered_products/<int:oid>')
-@login_required
-def ordered_products(oid):
-    order = agent.query(Order_Detail).filter(Order_Detail.id == oid).first()
-    if not order:
-        flash("Order not found.", "danger")
-        return redirect('/orders/' + str(session['user']))
-    if order.user_id != session['user']:
-        flash("Unauthorized access to this order.", "danger")
-        return redirect('/orders/' + str(session['user']))
-
-    ordered_items = agent.query(Order_Items).filter(Order_Items.order_id == oid).all()
-    return render_template('user/ordered_products.html', order=order, ordered_items=ordered_items)
-
-
-
-
-
-    # Step 3: General commands
-    if "cart" in message:
+    # ✅ Step 3: General commands
+    if "go to cart" in message or message.strip() == "cart":
         reply = f"Here is your cart, {name}."
         action = f"/cart/{user.id}"
+        return jsonify({'reply': reply, 'action': action})
 
     elif "orders" in message:
         reply = f"Showing your orders, {name}."
         action = f"/orders/{user.id}"
+        return jsonify({'reply': reply, 'action': action})
 
     elif "profile" in message:
         reply = f"Opening your profile, {name}."
         action = f"/profile/{user.id}"
+        return jsonify({'reply': reply, 'action': action})
 
     elif "logout" in message:
         reply = f"Logging you out, {name}."
         action = "/logout"
+        return jsonify({'reply': reply, 'action': action})
 
-    elif "apply coupon" in message or "coupon" in message or "code" in message:
-        if "Grovia25" in message:
-            reply = "Coupon Grovia25 applied successfully! You got 25% off."
-            action = "apply_coupon"
-        else:
-            reply = "Invalid coupon code."
+    elif "show coupon" in message or "available coupons" in message or "list coupon" in message:
+        reply = "Here are some available coupons: Grovia25, SAVE20, FRESH5, GET10."
+        action = "show_coupons"
+        return jsonify({'reply': reply, 'action': action})
+
+    elif "apply coupon" in message or "coupon" in message or "code" in message or "apply" in message:
+        coupon_codes = ["grovia25", "save20", "fresh5", "get10"]
+        applied = False
+
+        for code in coupon_codes:
+            if code in message.replace(" ", ""):
+                reply = f"Coupon {code.upper()} applied successfully! 🎉"
+                action = "apply_coupon"
+                applied = True
+                break
+
+        if not applied:
+            reply = "Sorry, I couldn't recognize any valid coupon to apply."
+
+
+            return jsonify({'reply': reply})
 
     elif "place order" in message:
         cart = agent.query(Cart).filter(Cart.user_id == user.id).all()
@@ -266,26 +258,62 @@ def ordered_products(oid):
             action = f"/orders/{user.id}"
         else:
             reply = "Your cart is empty. Please add some items first."
+        return jsonify({'reply': reply, 'action': action})
 
-    elif "remove" in message and "item" in message:
-        ordinals = {
-            "first": 0, "second": 1, "third": 2, "fourth": 3, "fifth": 4,
-            "sixth": 5, "seventh": 6, "eighth": 7, "ninth": 8, "tenth": 9
-        }
-        found = None
-        for word, index in ordinals.items():
-            if word in message:
-                found = index
+    elif "remove" in message:
+        cart_items = agent.query(Cart).filter(Cart.user_id == user.id).all()
+        removed = False
+
+    # Try to match product name
+        for item in cart_items:
+            pname = item.product_name.lower()
+            if pname in message or any(word in pname.split() for word in message.split()):
+                agent.delete(item)
+                agent.commit()
+                reply = f"Removed {item.product_name} from your cart."
+                removed = True
                 break
 
-        cart_items = agent.query(Cart).filter(Cart.user_id == user.id).all()
-        if found is not None and found < len(cart_items):
-            item_to_remove = cart_items[found]
-            agent.delete(item_to_remove)
-            agent.commit()
-            reply = f"Removed {item_to_remove.product_name} from your cart."
-        else:
+    # Try ordinal fallback (e.g., first, second)
+        if not removed:
+            ordinals = {
+                "first": 0, "second": 1, "third": 2, "fourth": 3, "fifth": 4,
+                "sixth": 5, "seventh": 6, "eighth": 7, "ninth": 8, "tenth": 9
+            }
+            found = None
+            for word, index in ordinals.items():
+                if word in message:
+                    found = index
+                    break
+
+            if found is None:
+                match = re.search(r'(\d+)', message)
+                if match:
+                    found = int(match.group(1)) - 1
+
+            if found is not None and 0 <= found < len(cart_items):
+                item_to_remove = cart_items[found]
+                agent.delete(item_to_remove)
+                agent.commit()
+                reply = f"Removed {item_to_remove.product_name} from your cart."
+                removed = True
+
+        if not removed:
             reply = "Sorry, I couldn't identify which item to remove."
+
+
+            return jsonify({'reply': reply})
+
+    elif "remove" in message:
+        cart_items = agent.query(Cart).filter(Cart.user_id == user.id).all()
+        for item in cart_items:
+            if item.product_name.lower() in message:
+                agent.delete(item)
+                agent.commit()
+                reply = f"Removed {item.product_name} from your cart."
+                return jsonify({'reply': reply})
+        reply = "Sorry, I couldn't find that item in your cart."
+        return jsonify({'reply': reply})
 
     elif "set" in message or "change" in message:
         cart_items = agent.query(Cart).filter(Cart.user_id == user.id).all()
@@ -298,12 +326,11 @@ def ordered_products(oid):
                     reply = f"Updated {item.product_name} to {item.quantity} in your cart."
                     return jsonify({'reply': reply})
         reply = "Sorry, I couldn't identify which item to update."
-    elif "show coupon" in message or "available coupons" in message:
-       reply = "Here are some available coupons: Grovia25, SAVE20, FRESH5, GET10."
-       action = "show_coupons"
+        return jsonify({'reply': reply})
 
+    # Default fallback
+    return jsonify({'reply': reply})
 
-    return jsonify({'reply': reply, 'action': action})
     
 
 @app.route('/recommendations')
@@ -312,4 +339,3 @@ def recommendations():
     user = agent.query(User).filter(User.id == session['user']).first()
     recommended_products = agent.query(Product).order_by(Product.id.desc()).limit(6).all()
     return render_template('user/recommendations.html', user=user, products=recommended_products)
-    

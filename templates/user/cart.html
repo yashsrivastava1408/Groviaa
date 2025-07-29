@@ -298,7 +298,8 @@ body {
         <input type="text" id="coupon_code" placeholder="Coupon Code"/>
         <button class="btn btn-secondary ml-2" id="apply_coupon" onclick="applyCoupon()">Apply Coupon</button>
         <button class="btn btn-info btn-sm ml-2" onclick="toggleCouponList()">Show Coupons</button>
-        <div id="coupon-list">
+        <div id="coupon-list" style="display: none;">
+
           <button class="btn btn-outline-success coupon-btn" onclick="autoApply('Grovia25')">Grovia25</button>
           <button class="btn btn-outline-success coupon-btn" onclick="autoApply('SAVE20')">SAVE20</button>
           <button class="btn btn-outline-success coupon-btn" onclick="autoApply('FRESH5')">FRESH5</button>
@@ -312,132 +313,149 @@ body {
   <div id="ai-controls">
     <button id="aiMicBtn" class="btn btn-primary">🎙️ Talk</button>
     <button id="stopMicBtn" class="btn btn-danger" style="display:none;">⛔ Stop</button>
-    <p id="ai-response" style="margin-top: 8px;"></p>
+    <p id="ai-response" style="margin-top: 8px;">Try saying: "apply Grovia25", "remove first item", "show coupons"</p>
+
   </div>
 
   <script>
-    // Load voice
-    let selectedVoice = null;
-    const synth = window.speechSynthesis;
-    function loadVoices() {
-      return new Promise(resolve => {
-        const voices = synth.getVoices();
-        if (voices.length) return resolve(voices);
-        synth.onvoiceschanged = () => resolve(synth.getVoices());
-      });
-    }
-    async function selectVoice() {
-      const voices = await loadVoices();
-      selectedVoice = voices.find(v => v.name.toLowerCase().includes("female")) || voices[0];
-    }
-    selectVoice();
+  // Load voice
+  const synth = window.speechSynthesis; // ✅ fix: define it!
+  let selectedVoice = null;
 
-    // AI Mic setup
-    let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = "en-IN";
-    recognition.continuous = true;
-    recognition.interimResults = false;
+  function loadVoices() {
+    return new Promise(resolve => {
+      const voices = synth.getVoices();
+      if (voices.length > 0) resolve(voices);
+      else synth.onvoiceschanged = () => resolve(synth.getVoices());
+    });
+  }
 
-    const micBtn = document.getElementById("aiMicBtn");
-    const stopBtn = document.getElementById("stopMicBtn");
-    const responseBox = document.getElementById("ai-response");
+  async function selectVoice() {
+    const voices = await loadVoices();
+    selectedVoice = voices.find(v =>
+      v.name.toLowerCase().includes("female") ||
+      v.name.toLowerCase().includes("zira") ||
+      v.name.toLowerCase().includes("samantha") ||
+      v.name.toLowerCase().includes("google uk english female")
+    ) || voices.find(v => v.lang.includes("en")) || voices[0];
+  }
 
-    micBtn.onclick = () => {
-      recognition.start();
-      micBtn.style.display = "none";
-      stopBtn.style.display = "inline-block";
-      responseBox.innerText = "Listening... Try: 'apply Grovia25', 'remove first item', 'show coupons'";
-    };
+  selectVoice();
 
-    stopBtn.onclick = () => {
-      recognition.stop();
-      micBtn.style.display = "inline-block";
-      stopBtn.style.display = "none";
-      responseBox.innerText = "Assistant stopped.";
-    };
+  function speak(text) {
+    const utter = new SpeechSynthesisUtterance(text);
+    if (selectedVoice) utter.voice = selectedVoice;
+    utter.pitch = 1.2;
+    utter.rate = 1;
+    synth.speak(utter);
+  }
 
-    recognition.onend = () => {
-      recognition.start();
-    };
+  // AI Mic setup
+  let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.lang = "en-IN";
+  recognition.continuous = true;
+  recognition.interimResults = false;
 
-    recognition.onerror = (e) => {
-      console.error("Speech error:", e.error);
-      setTimeout(() => recognition.start(), 1000);
-    };
+  const micBtn = document.getElementById("aiMicBtn");
+  const stopBtn = document.getElementById("stopMicBtn");
+  const responseBox = document.getElementById("ai-response");
 
-    recognition.onresult = async (event) => {
-      const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
-      console.log("You said:", transcript);
+  micBtn.onclick = () => {
+    recognition.start();
+    micBtn.style.display = "none";
+    stopBtn.style.display = "inline-block";
+    responseBox.innerText = "Listening...";
+  };
 
-      const response = await fetch("/ai-assistant", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: transcript })
-      });
+  stopBtn.onclick = () => {
+    recognition.stop();
+    micBtn.style.display = "inline-block";
+    stopBtn.style.display = "none";
+    responseBox.innerText = "Assistant stopped.";
+  };
 
-      const data = await response.json();
-      responseBox.innerText = "AI: " + data.reply;
+  recognition.onend = () => {
+    recognition.start();
+  };
 
-      const utter = new SpeechSynthesisUtterance(data.reply);
-      utter.pitch = 1.1;
-      utter.rate = 1;
+  recognition.onerror = (e) => {
+    console.error("Speech error:", e.error);
+    setTimeout(() => recognition.start(), 1000);
+  };
 
-      loadVoices().then(voices => {
-        if (!selectedVoice) selectedVoice = voices.find(v => v.name.toLowerCase().includes("female")) || voices[0];
-        utter.voice = selectedVoice;
+  recognition.onresult = async (event) => {
+    const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+    console.log("You said:", transcript);
 
-        if (synth.speaking) synth.cancel();
-        setTimeout(() => synth.speak(utter), 250);
-      });
+    const response = await fetch("/ai-assistant", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: transcript })
+    });
 
-      // Handle actions
-      if (data.action === "apply_coupon") {
-        applyCoupon();
-      } else if (data.action === "show_coupons") {
-        toggleCouponList(true);
-      } else if (data.action && data.action.startsWith("/")) {
-        setTimeout(() => window.location.href = data.action, 3000);
-      } else {
-        setTimeout(() => location.reload(), 3000);
-      }
-    };
+    const data = await response.json();
+    responseBox.innerText = "AI: " + data.reply;
 
-    // Coupon logic
-    function applyCoupon() {
-      const code = document.getElementById("coupon_code").value.trim().toUpperCase();
-      const totalInput = document.getElementById("hidden-total");
-      const totalAmount = parseFloat(totalInput.value);
+    const utter = new SpeechSynthesisUtterance(data.reply);
+    utter.pitch = 1.1;
+    utter.rate = 1;
+    if (selectedVoice) utter.voice = selectedVoice;
 
-      if (code === "Grovia25") {
-        const discounted = Math.floor(totalAmount * 0.75);
-        totalInput.value = discounted;
-        document.getElementById("total-amount").textContent = "Total: ₹" + discounted;
-        document.getElementById("coupon_code").disabled = true;
-        document.getElementById("apply_coupon").disabled = true;
-        alert("Coupon applied: 25% off!");
-      } else {
-        alert("Invalid coupon.");
-      }
-    }
+    if (synth.speaking) synth.cancel();
+    setTimeout(() => synth.speak(utter), 250);
 
-    function autoApply(code) {
-      document.getElementById("coupon_code").value = code;
+    // Action handlers
+    if (data.action === "apply_coupon") {
+      if (transcript.includes("grovia25")) document.getElementById("coupon_code").value = "Grovia25";
+      else if (transcript.includes("save20")) document.getElementById("coupon_code").value = "SAVE20";
+      else if (transcript.includes("fresh5")) document.getElementById("coupon_code").value = "FRESH5";
+      else if (transcript.includes("get10")) document.getElementById("coupon_code").value = "GET10";
+
       applyCoupon();
+    } else if (data.action === "show_coupons") {
+      toggleCouponList(true);
+    } else if (data.action && data.action.startsWith("/")) {
+      setTimeout(() => window.location.href = data.action, 3000);
+    } else {
+      setTimeout(() => location.reload(), 3000);
     }
+  };
 
-    function toggleCouponList(forceShow = false) {
-      const list = document.getElementById("coupon-list");
-      list.style.display = forceShow || list.style.display === "none" ? "block" : "none";
+  function applyCoupon() {
+    const code = document.getElementById("coupon_code").value.trim().toUpperCase();
+    const totalInput = document.getElementById("hidden-total");
+    const totalAmount = parseFloat(totalInput.value);
+
+    if (code === "GROVIA25") {
+      const discounted = Math.floor(totalAmount * 0.75);
+      totalInput.value = discounted;
+      document.getElementById("total-amount").textContent = "Total: ₹" + discounted;
+      document.getElementById("coupon_code").disabled = true;
+      document.getElementById("apply_coupon").disabled = true;
+      alert("Coupon applied: 25% off!");
+    } else {
+      alert("Invalid coupon.");
     }
+  }
 
-    function placeOrder() {
-      alert("Order placed successfully!");
-    }
+  function autoApply(code) {
+    document.getElementById("coupon_code").value = code;
+    applyCoupon();
+  }
 
-    // Auto-start mic
-    window.onload = () => {
-      micBtn.click();
-    };
-  </script>
+  function toggleCouponList(forceShow = false) {
+    const list = document.getElementById("coupon-list");
+    list.style.display = forceShow || list.style.display === "none" ? "block" : "none";
+  }
+
+  function placeOrder() {
+    alert("Order placed successfully!");
+  }
+
+  window.onload = () => {
+    micBtn.click();
+  };
+</script>
+
 </body>
 </html>

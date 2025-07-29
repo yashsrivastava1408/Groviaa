@@ -6,7 +6,7 @@ import os
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
-app.config['UPLOAD_FOLDER'] = os.path.join('static', 'products')
+app.config['UPLOAD_FOLDER'] = os.path.join('static', 'assets')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp'}
 
 def allowed_file(filename):
@@ -143,6 +143,32 @@ def admin_product_handler():
         return redirect(url_for('login'))
     product_list = agent.query(Product).all()
     return render_template('admin/product_handler.html', products=product_list)
+
+@app.route('/admin/product/delete/<int:pid>', methods=['POST'])
+def delete_product(pid):
+    if 'admin' not in session:
+        return redirect(url_for('login'))
+
+    product = agent.query(Product).filter(Product.id == pid).first()
+    if product:
+        # Delete the image from static/assets if it exists
+        if product.image:
+            image_path = os.path.join(app.config['UPLOAD_FOLDER'], product.image)
+            if os.path.exists(image_path):
+                os.remove(image_path)
+
+        # Delete the product from the database
+        agent.delete(product)
+        agent.commit()
+
+        flash('Product deleted successfully.', 'success')
+    else:
+        flash('Product not found.', 'danger')
+
+    return redirect('/admin/product_handler')
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

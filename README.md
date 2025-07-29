@@ -1,14 +1,6 @@
 Grovia
-Demo Video :movie_camera: 
 Grovia is an e-commerce platform focused on environmentally friendly and sustainable products. This platform aims to connect consumers with products that have a positive impact on the environment.
-Application Snapshots
-<div class="carousel">
-    <details> <summary>Admin's Dashboard</summary>
-  <img src="https://raw.githubusercontent.com/namansehwal/Grovia/main/static/admin_page.png" alt="Image 1" width='80%'>
-            </details>
- <details> <summary>Homepage</summary> <img src="https://raw.githubusercontent.com/namansehwal/Grovia/main/static/user.png" alt="Image 2"  width='80%'>   </details>
-  <details><summary>Product Card</summary> <img src="https://raw.githubusercontent.com/namansehwal/Grovia/main/static/product.png" alt="Image 3"  width='80%'>   </details>
-</div>
+
 Table of Contents
 
 Introduction
@@ -81,23 +73,9 @@ Grovia/
 ┣ requirements.txt
 ┣ user_routes.py
 ┗ vault.py
-Contributing 🧑‍🤝‍🧑
-If you'd like to contribute to the project, here are the steps:
 
-Fork the Project.
-Create your Feature Branch: git checkout -b feature/YourFeature
-Commit your Changes: git commit -m 'Add some amazing feature'
-Push to the Branch: git push origin feature/YourFeature
-Open a Pull Request.
 
-License 🏛️
-This project is licensed under the MIT License.
-Contact 🤙
 Connect with the project creator for any questions or feedback:
 
-Name: Naman Sehwal
-Email: namansehwal@gmail.com
-GitHub: @namansehwal
-LinkedIn: Naman Sehwal
 
 Feel free to explore the code and contribute to make this app even better! 😊
