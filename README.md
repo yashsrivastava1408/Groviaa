@@ -1,81 +1,46 @@
-Grovia
-Grovia is an e-commerce platform focused on environmentally friendly and sustainable products. This platform aims to connect consumers with products that have a positive impact on the environment.
+# 🌱 Grovia – Voice-Assisted Eco-Friendly E-Commerce
 
-Table of Contents
+Grovia is an innovative e-commerce platform designed to promote **environmentally friendly and sustainable products**. Built during **Sparkathon 2025**, it combines a modern shopping experience with an AI-powered voice assistant to make online grocery shopping smarter, faster, and greener.
 
-Introduction
-Features
-Installation
-Usage
-Contributing
-License
+---
 
-Introduction
-Grovia is built with the goal of promoting eco-friendly products and practices. It provides a user-friendly interface for users to explore, search, and purchase products that align with sustainability values. Whether you're a conscious consumer or a seller of sustainable products, Grovia provides a platform to connect and contribute to a greener future.
-Features
+## 📚 Table of Contents
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API / Voice Assistant](#api--voice-assistant)
+- [Contributing](#contributing)
 
-Product Listings: Browse through a wide range of sustainable products.
-Search and Filters: Easily find products using search and filtering options.
-User Accounts: Create and manage your account for a personalized experience.
-Shopping Cart: Add and remove products from your cart before making a purchase.
-Seller Dashboard: For sellers to manage their products and inventory.
-Order History: Track your order history and delivery status.
-AI Assistant: Intelligent shopping assistant to help find products and answer questions.
+---
 
-API Documentation
-:rocket: Quick Start
-Run the site locally
-Installation
-To set up Grovia locally, follow these steps:
+## 📖 Introduction
 
-Clone the repository:
-bashgit clone https://github.com/namansehwal/Grovia.git
-cd Grovia
+Grovia helps users discover, filter, and purchase eco-conscious products easily. The platform includes a smart AI assistant that responds to natural voice commands like:
 
-Create a virtual environment:
-bashpython3 -m venv venv
+> “Apply Grovia25”  
+> “Show coupons”  
+> “Remove first item”  
 
-Activate the virtual environment:
+Whether you're a conscious consumer or a sustainable seller — Grovia bridges the gap with intelligent design.
 
-On macOS and Linux:
-bashsource venv/bin/activate
+---
 
-On Windows:
-bashvenv\Scripts\activate
+## ✅ Features
 
+- 🛍️ **Product Listings** – Browse sustainable and organic products  
+- 🔍 **Smart Search & Filters** – Easily narrow down by category, price, or keywords  
+- 👤 **User Accounts** – Personalized login and order tracking  
+- 🛒 **Shopping Cart** – Add/remove products with real-time updates  
+- 🧠 **Voice Assistant** – Speech recognition + AI replies using Web Speech API  
+- 🎟️ **Coupon System** – Apply codes like `Grovia25` with voice or input  
+- 🗂️ **Seller Dashboard** – Manage listings, track inventory *(for future release)*
 
+---
 
-Install the required packages:
-bashpip install -r requirements.txt
+## ⚙️ Installation
 
-To run flask server:
-bashpython application.py
-
-
-:open_file_folder: What's inside?
-A quick look at the folder structure of this project.
-.
-Grovia/
-┣ static/
-┃ ┣ assets/
-┃ ┣ styles/
-┣ templates/
-┃ ┣ admin/
-┃ ┣ login/
-┃ ┗ user/
-┣ admin_routes.py
-┣ api.py
-┣ api_methods.yaml
-┣ application.py
-┣ authentication.py
-┣ database.sqlite3
-┣ README.md
-┣ requirements.txt
-┣ user_routes.py
-┗ vault.py
-
-
-Connect with the project creator for any questions or feedback:
-
-
-Feel free to explore the code and contribute to make this app even better! 😊
+### 1. Clone the repository
+```bash
+git clone https://github.com/yashsrivastava1408/Groviaa.git
+cd Groviaa
